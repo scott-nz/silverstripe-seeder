@@ -5,12 +5,13 @@ namespace Seeder\Tests;
 use Seeder\Helpers\ConfigParser;
 use Seeder\Util\Field;
 use Seeder\Util\RecordWriter;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class ConfigParserTest
  * @package Seeder\Tests
  */
-class ConfigParserTest extends \SapphireTest
+class ConfigParserTest extends SapphireTest
 {
     /**
      * @var bool

@@ -4,12 +4,13 @@ namespace Seeder\Tests;
 
 use Seeder\Helpers\HeuristicParser;
 use Seeder\Util\Field;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class HeuristicParserTest
  * @package Seeder\Tests
  */
-class HeuristicParserTest extends \SapphireTest
+class HeuristicParserTest extends SapphireTest
 {
     /**
      * @var bool

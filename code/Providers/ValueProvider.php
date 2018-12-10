@@ -1,8 +1,9 @@
 <?php
 
-namespace Seeder;
+namespace Seeder\Providers;
 
 use Exception;
+use SilverStripe\ORM\DataObject;
 
 /**
  * Class ValueProvider
@@ -35,7 +36,7 @@ class ValueProvider extends Provider
     {
         $value = $this->resolveValue($field, $state);
 
-        if ($value instanceof \DataObject) {
+        if ($value instanceof DataObject) {
             $value = $value->ID;
         }
 

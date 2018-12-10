@@ -1,8 +1,8 @@
 <?php
 
-namespace Seeder;
+namespace Seeder\Providers;
 
-use DataObject;
+use SilverStripe\ORM\DataObject;
 
 /**
  * Class SortProvider

@@ -1,6 +1,6 @@
 <?php
 
-namespace Seeder;
+namespace Seeder\Providers;
 
 /**
  * Class ProviderCache

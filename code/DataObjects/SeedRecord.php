@@ -1,5 +1,8 @@
 <?php
 
+namespace Seeder\DataObjects;
+
+use SilverStripe\ORM\DataObject;
 /**
  * Class SeedRecord
  */

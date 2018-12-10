@@ -4,7 +4,8 @@ namespace Seeder\Tasks;
 
 use Seeder\Seeder;
 use Seeder\Helpers\CliOutputFormatter;
-use Seeder\Util\BatchedSeedWriter;
+use SilverStripe\Control\CliController;
+use SilverStripe\Security\Member;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +18,7 @@ use Seeder\Util\RecordWriter;
 /**
  * Class Unseed
  */
-class Unseed extends \CliController
+class Unseed extends CliController
 {
     /**
      * @var string
@@ -76,7 +77,7 @@ class UnseedCommand extends Command
         // login throws cookie warning, this will hide the error message
         error_reporting();
         try {
-            if ($admin = \Member::default_admin()) {
+            if ($admin = Member::default_admin()) {
                 $admin->logIn();
             }
         } catch (\Exception $e) {

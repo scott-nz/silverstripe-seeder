@@ -4,14 +4,15 @@ namespace Seeder\Tests;
 
 use Seeder\Helpers\ConfigParser;
 use Seeder\Util\SeederState;
-use SiteTree;
+use SilverStripe\CMS\Model\SiteTree;
 use Seeder\URLSegmentProvider;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class URLSegmentProviderTest
  * @package Seeder\Tests
  */
-class URLSegmentProviderTest extends \SapphireTest
+class URLSegmentProviderTest extends SapphireTest
 {
     /**
      * @var bool

@@ -4,14 +4,15 @@ namespace Seeder\Tests;
 
 use Seeder\Helpers\ConfigParser;
 use Seeder\Util\SeederState;
-use SiteTree;
+use SilverStripe\CMS\Model\SiteTree;
 use Seeder\PageTitleProvider;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class PageTitleProviderTest
  * @package Seeder\Tests
  */
-class PageTitleProviderTest extends \SapphireTest
+class PageTitleProviderTest extends SapphireTest
 {
     /**
      * @var bool

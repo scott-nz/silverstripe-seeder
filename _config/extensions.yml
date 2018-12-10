@@ -5,5 +5,5 @@ After: 'framework/*', 'cms/*'
 
 DataObject:
   extensions:
-    - IsSeededExtension
+    - Seeder\Extensions\IsSeededExtension
     - WriteCallbackExtension

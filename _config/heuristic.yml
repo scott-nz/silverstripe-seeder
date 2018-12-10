@@ -3,7 +3,7 @@ Name: seeder-heuristics
 After: framework/*, cms/*
 ---
 
-Seeder:
+Seeder\Seeder:
   heuristics:
     # field types
 

@@ -2,14 +2,19 @@
 
 namespace Seeder\Tests;
 
+use Seeder\DataObjects\SeedRecord;
 use Seeder\Util\BatchedSeedWriter;
 use Seeder\Util\Field;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Versioned\Versioned;
+use OnAfterExists;
 
 /**
  * Class BatchSeedWriterTest
  * @package Seeder\Tests
  */
-class BatchSeedWriterTest extends \SapphireTest
+class BatchSeedWriterTest extends SapphireTest
 {
     /**
      * @var bool
@@ -33,7 +38,7 @@ class BatchSeedWriterTest extends \SapphireTest
     public function __construct()
     {
         parent::__construct();
-        $this->setUpOnce();
+        $this->setUpBeforeClass();
     }
 
     /**
@@ -59,9 +64,9 @@ class BatchSeedWriterTest extends \SapphireTest
             $writer->finish();
 
             $this->assertEquals(1, Dog::get()->Count());
-            $this->assertEquals(1, \SeedRecord::get()->Count());
+            $this->assertEquals(1, SeedRecord::get()->Count());
 
-            $seed = \SeedRecord::get()->first();
+            $seed = SeedRecord::get()->first();
             $dog = Dog::get()->first();
 
             $this->assertEquals('Seeder\Tests\Dog', $seed->SeedClassName);
@@ -104,8 +109,8 @@ class BatchSeedWriterTest extends \SapphireTest
 
             $writer->finish();
 
-            $dogSeeds = \SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Dog');
-            $ownerSeeds = \SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Human');
+            $dogSeeds = SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Dog');
+            $ownerSeeds = SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Human');
             $dogs = Dog::get();
             $owners = Human::get();
 
@@ -135,7 +140,7 @@ class BatchSeedWriterTest extends \SapphireTest
 
             $this->assertEquals(0, Dog::get()->Count());
             $this->assertEquals(0, Human::get()->Count());
-            $this->assertEquals(0, \SeedRecord::get()->Count());
+            $this->assertEquals(0, SeedRecord::get()->Count());
         }
     }
 
@@ -167,10 +172,10 @@ class BatchSeedWriterTest extends \SapphireTest
             $writer->finish();
 
             $this->assertEquals(100, Dog::get()->Count());
-            $this->assertEquals(100, \SeedRecord::get()->Count());
+            $this->assertEquals(100, SeedRecord::get()->Count());
 
             $dogs = Dog::get();
-            $seeds = \SeedRecord::get();
+            $seeds = SeedRecord::get();
             $writer->delete($dogs);
             $writer->delete($seeds);
             $writer->finish();
@@ -192,7 +197,7 @@ class BatchSeedWriterTest extends \SapphireTest
             $writer = new BatchedSeedWriter($batchSize);
 
             for ($i = 0; $i < 100; $i++) {
-                $page = new \SiteTree();
+                $page = new SiteTree();
                 $page->Title = 'Magical Unicorn Journeys ' . $i;
 
                 $field = $this->createField();
@@ -202,21 +207,21 @@ class BatchSeedWriterTest extends \SapphireTest
 
             $writer->finish();
 
-            $currentStage = \Versioned::current_stage();
-            \Versioned::reading_stage('Stage');
-            $this->assertEquals(100, \SiteTree::get()->Count());
+            $currentStage = Versioned::current_stage();
+            Versioned::reading_stage('Stage');
+            $this->assertEquals(100, SiteTree::get()->Count());
 
-            \Versioned::reading_stage('Live');
-            $this->assertEquals(0, \SiteTree::get()->Count());
+            Versioned::reading_stage('Live');
+            $this->assertEquals(0, SiteTree::get()->Count());
 
             \Versioned::reading_stage('Stage');
-            $pages = \SiteTree::get();
-            $seeds = \SeedRecord::get();
+            $pages = SiteTree::get();
+            $seeds = SeedRecord::get();
             $writer->deleteFromStage($pages, 'Stage', 'Live');
             $writer->delete($seeds);
             $writer->finish();
 
-            \Versioned::reading_stage($currentStage);
+            Versioned::reading_stage($currentStage);
         }
     }
 
@@ -235,7 +240,7 @@ class BatchSeedWriterTest extends \SapphireTest
             $writer = new BatchedSeedWriter($batchSize);
 
             for ($i = 0; $i < 100; $i++) {
-                $page = new \SiteTree();
+                $page = new SiteTree();
                 $page->Title = 'Magical Unicorn Journeys ' . $i;
 
                 $field = $this->createField();
@@ -244,23 +249,23 @@ class BatchSeedWriterTest extends \SapphireTest
 
             $writer->finish();
 
-            $currentStage = \Versioned::current_stage();
-            \Versioned::reading_stage('Stage');
-            $this->assertEquals(100, \SiteTree::get()->Count());
+            $currentStage = Versioned::current_stage();
+            Versioned::reading_stage('Stage');
+            $this->assertEquals(100, SiteTree::get()->Count());
 
             \Versioned::reading_stage('Live');
-            $this->assertEquals(100, \SiteTree::get()->Count());
+            $this->assertEquals(100, SiteTree::get()->Count());
 
-            $pages = \SiteTree::get();
-            $seeds = \SeedRecord::get();
+            $pages = SiteTree::get();
+            $seeds = SeedRecord::get();
             $writer->deleteFromStage($pages, 'Stage', 'Live');
             $writer->delete($seeds);
             $writer->finish();
 
-            $this->assertEquals(0, \SiteTree::get()->Count());
-            $this->assertEquals(0, \SeedRecord::get()->Count());
+            $this->assertEquals(0, SiteTree::get()->Count());
+            $this->assertEquals(0, SeedRecord::get()->Count());
 
-            \Versioned::reading_stage($currentStage);
+            Versioned::reading_stage($currentStage);
         }
     }
 
@@ -286,7 +291,7 @@ class BatchSeedWriterTest extends \SapphireTest
                     $dog = new Dog();
                     $dog->Name = 'Walnut ' . $i;
 
-                    $afterExists = new \OnAfterExists(function () use ($owner, $dog, $writer) {
+                    $afterExists = new OnAfterExists(function () use ($owner, $dog, $writer) {
                         $writer->writeManyMany($owner, 'Pets', $dog);
                     });
                     $afterExists->addCondition($owner);

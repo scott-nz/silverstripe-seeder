@@ -2,11 +2,14 @@
 
 namespace Seeder\Tests;
 
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
+
 /**
  * Class House
  * @package Seeder\Tests
  */
-class House extends \DataObject implements \TestOnly
+class House extends DataObject implements TestOnly
 {
     /**
      * @var array

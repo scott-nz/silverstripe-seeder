@@ -2,10 +2,13 @@
 
 namespace Seeder;
 
+use Seeder\DataObjects\SeedRecord;
 use Seeder\Helpers\ConfigParser;
 use Seeder\Helpers\HeuristicParser;
 use Seeder\Helpers\OutputFormatter;
 use Seeder\Util\SeederState;
+use SilverStripe\Core\Config\Config;
+use SilverStripe\ORM\DataObject;
 
 /**
  * Class Seeder
@@ -55,7 +58,7 @@ class Seeder extends \Object
         $configParser = new ConfigParser($this->writer);
 
         $heuristics = array();
-        $config = \Config::inst()->get('Seeder', 'heuristics');
+        $config = Config::inst()->get('Seeder', 'heuristics');
         if ($config) {
             $heuristicParser = new HeuristicParser();
             $heuristics = $heuristicParser->parse($config);
@@ -120,7 +123,7 @@ class Seeder extends \Object
             return $count;
         }
 
-        $currentCount = \SeedRecord::get()->filter(array(
+        $currentCount = SeedRecord::get()->filter(array(
             'Root' => true,
             'SeedClassName' => $field->dataType,
             'Key' => $field->key,
@@ -179,7 +182,7 @@ class Seeder extends \Object
 
         $deleted = array();
 
-        $seeds = \SeedRecord::get();
+        $seeds = SeedRecord::get();
         if ($key) {
             $seeds = $seeds->filter('Key', $key);
         }
@@ -196,7 +199,7 @@ class Seeder extends \Object
             }
 
             foreach ($classes as $className => $ids) {
-                $versioned = \DataObject::has_extension($className, 'Versioned');
+                $versioned = DataObject::has_extension($className, 'Versioned');
                 if ($versioned) {
                     $this->writer->deleteIDsFromStage($className, $ids, 'Stage', 'Live');
                 } else {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Seeder;
+namespace Seeder\Providers;
 
-use Convert;
-use FormField;
-use SiteTree;
+use SilverStripe\Core\Convert;
+use SilverStripe\Forms\FormField;
+use SilverStripe\CMS\Model\SiteTree;
 
 /**
  * Class URLSegmentProvider

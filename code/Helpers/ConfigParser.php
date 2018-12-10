@@ -4,6 +4,9 @@ namespace Seeder\Helpers;
 
 use Exception;
 use Seeder\Util\Field;
+use SilverStripe\ORM\DataObject;
+use SilverStripe\Core\Injector;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ConfigParser
@@ -95,7 +98,7 @@ class ConfigParser
         $hasManyFields = array();
         $manyManyFields = array();
         foreach ($field->ancestry as $classObject) {
-            foreach (\DataObject::custom_database_fields($classObject->ClassName) as $fieldName => $fieldType) {
+            foreach (DataObject::custom_database_fields($classObject->ClassName) as $fieldName => $fieldType) {
                 $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
                 if ($fieldType !== 'ForeignKey' && !$ignored) {
                     $fields[$fieldName] = $fieldType;
@@ -202,7 +205,8 @@ class ConfigParser
 
             foreach ($this->config->providers as $provider) {
                 if (!class_exists($provider) && !class_exists(str_replace('\\', '\\\\', $provider))) {
-                    \SS_Log::log("provider class '{$provider}' cannot be found", \SS_Log::WARN);
+                    Injector::inst()->get(LoggerInterface::class)
+                        ->warning("provider class '{$provider}' cannot be found");
                 } elseif (isset($provider::$shorthand)) {
                     if (strtolower($provider::$shorthand) === $shorthand) {
                         $options = $provider::parseOptions($arguments);

@@ -2,11 +2,14 @@
 
 namespace Seeder\Tests;
 
+use SilverStripe\Dev\TestOnly;
+use SilverStripe\ORM\DataObject;
+
 /**
  * Class Human
  * @package Seeder\Tests
  */
-class Human extends \DataObject implements \TestOnly
+class Human extends DataObject implements TestOnly
 {
     /**
      * @var array

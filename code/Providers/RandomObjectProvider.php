@@ -1,9 +1,10 @@
 <?php
 
-namespace Seeder;
+namespace Seeder\Providers;
 
 use Exception;
-use SS_Log;
+use Psr\Log\LoggerInterface;
+use SilverStripe\Core\Injector\Injector;
 
 /**
  * Class RandomObjectProvider
@@ -45,7 +46,7 @@ class RandomObjectProvider extends Provider
         $object = $className::get()->sort('RAND()')->first();
 
         if (!$object) {
-            SS_Log::log("random for {$className} not found", SS_Log::WARN);
+            Injector::inst()->get(LoggerInterface::class)->warning("random for {$className} not found");
         }
 
         return $object;

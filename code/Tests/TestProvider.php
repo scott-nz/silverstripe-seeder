@@ -2,7 +2,7 @@
 
 namespace Seeder\Tests;
 
-use Seeder\Provider;
+use Seeder\Providers\Provider;
 
 /**
  * Class TestProvider

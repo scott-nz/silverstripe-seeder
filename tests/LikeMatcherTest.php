@@ -3,12 +3,13 @@
 namespace Seeder\Tests;
 
 use Seeder\Heuristics\LikeMatcher;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class LikeMatcherTest
  * @package Seeder\Tests
  */
-class LikeMatcherTest extends \SapphireTest
+class LikeMatcherTest extends SapphireTest
 {
     /**
      *

@@ -1,4 +1,5 @@
 <?php
+namespace Seeder\Extensions;
 
 /**
  * Class IsSeededExtension

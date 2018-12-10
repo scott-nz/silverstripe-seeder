@@ -3,12 +3,13 @@
 namespace Seeder\Tests;
 
 use Seeder\Heuristics\IsAMatcher;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class IsAMatcherTest
  * @package Seeder\Tests
  */
-class IsAMatcherTest extends \SapphireTest
+class IsAMatcherTest extends SapphireTest
 {
     /**
      *

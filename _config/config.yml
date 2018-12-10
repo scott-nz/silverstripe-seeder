@@ -5,28 +5,28 @@ After: 'framework/*', 'cms/*'
 
 Seeder:
   providers:
-    - \Seeder\DataTypeProvider
-    - \Seeder\DateProvider
-    - \Seeder\FakerProvider
-    - \Seeder\HTMLProvider
-    - \Seeder\ImageProvider
-    - \Seeder\MemberProvider
-    - \Seeder\FirstObjectProvider
-    - \Seeder\PageTitleProvider
-    - \Seeder\RandomObjectProvider
-    - \Seeder\SortProvider
-    - \Seeder\UniqueProvider
-    - \Seeder\URLSegmentProvider
-    - \Seeder\ValueProvider
-    - \Seeder\WhereProvider
+    - \Seeder\Provider\DataTypeProvider
+    - \Seeder\Provider\DateProvider
+    - \Seeder\Provider\FakerProvider
+    - \Seeder\Provider\HTMLProvider
+    - \Seeder\Provider\ImageProvider
+    - \Seeder\Provider\MemberProvider
+    - \Seeder\Provider\FirstObjectProvider
+    - \Seeder\Provider\PageTitleProvider
+    - \Seeder\Provider\RandomObjectProvider
+    - \Seeder\Provider\SortProvider
+    - \Seeder\Provider\UniqueProvider
+    - \Seeder\Provider\URLSegmentProvider
+    - \Seeder\Provider\ValueProvider
+    - \Seeder\Provider\WhereProvider
     # tests
     - \Seeder\Tests\TestProvider
-  empty_shorthand_provider: \Seeder\ValueProvider
-  default_provider: \Seeder\DataTypeProvider
+  empty_shorthand_provider: \Seeder\Provider\ValueProvider
+  default_provider: \Seeder\Provider\DataTypeProvider
   default_providers:
-    Image: \Seeder\ImageProvider
+    Image: \Seeder\Provider\ImageProvider
   default_ignores:
-    SiteTree:
+    SilverStripe\CMS\Model\SiteTree:
       - Sort
       - URLSegment
       - MenuTitle
@@ -38,7 +38,7 @@ Seeder:
       - MetaTitle
       - MetaDescription
       - ExtraMeta
-    Member:
+    SilverStripe\Security\Member:
       - TempIDHash
       - TempIDExpired
       - RememberLoginToken
@@ -55,14 +55,14 @@ Seeder:
       - DateFormat
       - TimeFormat
   default_values:
-    SiteTree:
+    SilverStripe\CMS\Model\SiteTree:
       ShowInMenus: 0
       ShowInSearch: 1
       CanViewType: Anyone
       CanEditType: LoggedInUsers
 
 
-Director:
+SilverStripe\Control\Director:
   rules:
     'seed' : '\Seeder\Tasks\Seed'
     'unseed' : '\Seeder\Tasks\Unseed'

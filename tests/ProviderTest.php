@@ -5,12 +5,15 @@ namespace Seeder\Tests;
 use Seeder\Helpers\ConfigParser;
 use Seeder\Util\RecordWriter;
 use Seeder\Util\SeederState;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Dev\SapphireTest;
+use SilverStripe\Versioned\Versioned;
 
 /**
  * Class ProviderTest
  * @package Seeder\Tests
  */
-class ProviderTest extends \SapphireTest
+class ProviderTest extends SapphireTest
 {
     /**
      * @var bool
@@ -290,14 +293,14 @@ class ProviderTest extends \SapphireTest
         $this->assertCount(1, $pages);
         $this->assertTrue($pages[0]->isPublished());
 
-        $currentStage = \Versioned::current_stage();
-        \Versioned::reading_stage('Stage');
-        $this->assertEquals(1, \SiteTree::get()->Count());
+        $currentStage = Versioned::current_stage();
+        Versioned::reading_stage('Stage');
+        $this->assertEquals(1, SiteTree::get()->Count());
 
-        \Versioned::reading_stage('Live');
-        $this->assertEquals(1, \SiteTree::get()->Count());
+        Versioned::reading_stage('Live');
+        $this->assertEquals(1, SiteTree::get()->Count());
 
-        \Versioned::reading_stage($currentStage);
+        Versioned::reading_stage($currentStage);
     }
 
 //    /**

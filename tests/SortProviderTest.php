@@ -4,14 +4,15 @@ namespace Seeder\Tests;
 
 use Seeder\Helpers\ConfigParser;
 use Seeder\Util\SeederState;
-use SiteTree;
+use SilverStripe\CMS\Model\SiteTree;
 use Seeder\SortProvider;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class SortProviderTest
  * @package Seeder\Tests
  */
-class SortProviderTest extends \SapphireTest
+class SortProviderTest extends SapphireTest
 {
     /**
      * @var bool

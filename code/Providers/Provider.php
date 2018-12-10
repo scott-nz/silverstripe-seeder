@@ -1,9 +1,9 @@
 <?php
 
-namespace Seeder;
+namespace Seeder\Providers;
 
 use Seeder\Util\Field;
-use SS_List;
+use SilverStripe\ORM\SS_List;
 
 /**
  * Class Provider

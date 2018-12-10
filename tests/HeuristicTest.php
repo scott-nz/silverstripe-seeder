@@ -6,12 +6,13 @@ use Seeder\Helpers\HeuristicParser;
 use Seeder\Util\BatchedSeedWriter;
 use Seeder\Util\Field;
 use Seeder\Util\RecordWriter;
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class HeuristicTest
  * @package Seeder\Tests
  */
-class HeuristicTest extends \SapphireTest
+class HeuristicTest extends SapphireTest
 {
     /**
      *

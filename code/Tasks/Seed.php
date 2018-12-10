@@ -7,6 +7,9 @@ use Seeder\Helpers\CliOutputFormatter;
 use Seeder\Util\BatchedSeedWriter;
 use Seeder\Util\Check;
 use Seeder\Util\RecordWriter;
+use SilverStripe\CMS\Model\SiteTree;
+use SilverStripe\Control\CliController;
+use SilverStripe\Security\Member;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -17,7 +20,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 /**
  * Class Seed
  */
-class Seed extends \CliController
+class Seed extends CliController
 {
     /**
      * @var string
@@ -72,8 +75,8 @@ class SeedCommand extends Command
             die('ERROR: Please set a valid path in $_FILE_TO_URL_MAPPING before running the seeder' . PHP_EOL);
         }
 
-        if (\SiteTree::has_extension('SiteTreeLinkTracking')) {
-            \SiteTree::remove_extension('SiteTreeLinkTracking');
+        if (SiteTree::has_extension('SiteTreeLinkTracking')) {
+            SiteTree::remove_extension('SiteTreeLinkTracking');
         }
 
         // Customer overrides delete to check for admin
@@ -82,7 +85,7 @@ class SeedCommand extends Command
         // login throws cookie warning, this will hide the error message
         error_reporting(0);
         try {
-            if ($admin = \Member::default_admin()) {
+            if ($admin = Member::default_admin()) {
                 $admin->logIn();
             }
         } catch (\Exception $e) {
