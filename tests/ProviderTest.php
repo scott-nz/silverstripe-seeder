@@ -45,12 +45,12 @@ class ProviderTest extends SapphireTest
      */
     public function testGenerate_SimpleFields_GeneratesObjectWithFields()
     {
-        $writer = new RecordWriter();
+        $writer = singleton(RecordWriter::class);
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'Seeder\Tests\Dog',
-            'provider' => 'Seeder\Tests\TestProvider',
+            'class' => Dog::class,
+            'provider' => TestProvider::class,
             'fields' => array(
                 'Name' => 'test()',
                 'Age' => 'test()',
@@ -59,8 +59,8 @@ class ProviderTest extends SapphireTest
         ));
 
         $provider = $field->provider;
-
-        $dogs = $provider->generate($field, new SeederState());
+        $state = new SeederState();
+        $dogs = $provider->generate($field, $state);
         $writer->finish();
 
         $this->assertCount(1, $dogs);
@@ -243,8 +243,8 @@ class ProviderTest extends SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'SiteTree',
-            'provider' => 'Seeder\Tests\TestProvider',
+            'class' => SiteTree::class,
+            'provider' => TestProvider::class,
             'publish' => false,
             'fields' => array(
                 'Title' => 'test()',
@@ -259,14 +259,14 @@ class ProviderTest extends SapphireTest
         $this->assertCount(1, $pages);
         $this->assertFalse($pages[0]->isPublished());
 
-        $currentStage = \Versioned::current_stage();
-        \Versioned::reading_stage('Stage');
-        $this->assertEquals(1, \SiteTree::get()->Count());
+        $currentStage = Versioned::current_stage();
+        Versioned::reading_stage('Stage');
+        $this->assertEquals(1, SiteTree::get()->Count());
 
-        \Versioned::reading_stage('Live');
-        $this->assertEquals(0, \SiteTree::get()->Count());
+        Versioned::reading_stage('Live');
+        $this->assertEquals(0, SiteTree::get()->Count());
 
-        \Versioned::reading_stage($currentStage);
+        Versioned::reading_stage($currentStage);
     }
 
     /**
@@ -278,8 +278,8 @@ class ProviderTest extends SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'SiteTree',
-            'provider' => 'Seeder\Tests\TestProvider',
+            'class' => SiteTree::class,
+            'provider' => TestProvider::class,
             'fields' => array(
                 'Title' => 'test()',
             ),

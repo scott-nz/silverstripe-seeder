@@ -52,7 +52,7 @@ class Condition
 
         $isMatch = false;
         foreach ($this->matchers as $matcher) {
-            $isMatch = $isMatch || $matcher->match($value);
+            $isMatch = $matcher->match($value);
         }
 
         return $isMatch;

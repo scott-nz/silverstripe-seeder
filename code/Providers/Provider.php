@@ -2,15 +2,25 @@
 
 namespace Seeder\Providers;
 
+use LittleGiant\BatchWrite\OnAfterExists;
+use LittleGiant\BatchWrite\QuickDataObject;
 use Seeder\Util\Field;
+use SilverStripe\Core\Config\Configurable;
+use SilverStripe\Core\Extensible;
+use SilverStripe\Core\Injector\Injectable;
+use SilverStripe\ORM\DataObject;
 use SilverStripe\ORM\SS_List;
 
 /**
  * Class Provider
  * @package Seeder
  */
-abstract class Provider extends \Object
+abstract class Provider
 {
+    use Extensible;
+    use Injectable;
+    use Configurable;
+
     /**
      * @var
      */
@@ -82,7 +92,7 @@ abstract class Provider extends \Object
     protected function generateObject($field, $upState, $index = 0)
     {
         $className = $field->dataType;
-        $object = \QuickDataObject::create($className);
+        $object = QuickDataObject::create($className);
 
         $state = $upState->down($field, $object, $index);
 
@@ -101,7 +111,7 @@ abstract class Provider extends \Object
 
 
         $hasOneIsAncestor = false;
-        $afterHasOneExists = new \OnAfterExists(function () use ($object, $field, $writer) {
+        $afterHasOneExists = new OnAfterExists(function () use ($object, $field, $writer) {
             $writer->write($object, $field);
         });
 

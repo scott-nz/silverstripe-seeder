@@ -14,7 +14,9 @@ class Dog extends Pet implements TestOnly
     /**
      * @var array
      */
-    public static $db = array(
+    private static $db = array(
         'Breed' => 'Varchar',
     );
+    
+    private static $table_name = 'Dog';
 }

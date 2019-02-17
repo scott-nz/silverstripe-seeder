@@ -1,6 +1,6 @@
 ---
 Name: seeder-heuristics
-After: framework/*, cms/*
+After: framework/*
 ---
 
 Seeder\Seeder:

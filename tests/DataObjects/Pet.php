@@ -14,22 +14,24 @@ class Pet extends DataObject implements TestOnly
     /**
      * @var array
      */
-    public static $db = array(
+    private static $db = array(
         'Name' => 'Varchar(60)',
         'Age' => 'Int',
     );
+
+    private static $table_name = 'Pet';
 
     /**
      * @var array
      */
     private static $has_many = array(
-        'Treats' => 'Seeder\Tests\Treat',
+        'Treats' => Treat::class,
     );
 
     /**
      * @var array
      */
     private static $belongs_many_many = array(
-        'BelongsHuman' => 'Seeder\Tests\Human',
+        'BelongsHuman' => Human::class,
     );
 }

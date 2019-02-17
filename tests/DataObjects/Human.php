@@ -14,31 +14,33 @@ class Human extends DataObject implements TestOnly
     /**
      * @var array
      */
-    public static $db = array(
+    private static $db = array(
         'Name' => 'Varchar(60)',
         'Age' => 'Int',
     );
+
+    private static $table_name = 'Human';
 
     /**
      * @var array
      */
     private static $has_one = array(
-        'Parent' => 'Seeder\Tests\Human',
-        'House' => 'Seeder\Tests\House',
+        'Parent' => Human::class,
+        'House' => House::class,
     );
 
     /**
      * @var array
      */
     private static $many_many = array(
-        'Pets' => 'Seeder\Tests\Pet',
-        'Children' => 'Seeder\Tests\Human',
+        'Pets' => Pet::class,
+        'Children' => Human::class,
     );
 
     /**
      * @var array
      */
     private static $belongs_many_many = array(
-        'Parents' => 'Seeder\Tests\Human',
+        'Parents' => Human::class,
     );
 }

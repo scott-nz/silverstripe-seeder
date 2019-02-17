@@ -2,6 +2,7 @@
 
 namespace Seeder;
 
+use PhpParser\Node\Expr\Cast\Object_;
 use Seeder\DataObjects\SeedRecord;
 use Seeder\Helpers\ConfigParser;
 use Seeder\Helpers\HeuristicParser;
@@ -13,7 +14,7 @@ use SilverStripe\ORM\DataObject;
 /**
  * Class Seeder
  */
-class Seeder extends \Object
+class Seeder extends Object_
 {
     /**
      * @var

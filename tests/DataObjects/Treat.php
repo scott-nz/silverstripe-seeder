@@ -14,15 +14,17 @@ class Treat extends DataObject implements TestOnly
     /**
      * @var array
      */
-    public static $db = array(
+    private static $db = array(
         'Brand' => 'Varchar',
         'Flavour' => 'Varchar',
     );
+
+    private static $table_name = 'Treat';
 
     /**
      * @var array
      */
     private static $has_one = array(
-        'Pet' => 'Seeder\Tests\Pet',
+        'Pet' => Pet::class,
     );
 }

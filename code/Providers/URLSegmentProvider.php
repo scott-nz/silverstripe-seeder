@@ -2,6 +2,7 @@
 
 namespace Seeder\Providers;
 
+use SilverStripe\Core\ClassInfo;
 use SilverStripe\Core\Convert;
 use SilverStripe\Forms\FormField;
 use SilverStripe\CMS\Model\SiteTree;
@@ -34,7 +35,7 @@ class URLSegmentProvider extends Provider
             return Convert::raw2url(uniqid($page->Title));
         }
 
-        $name = str_replace(array('Page', 'Holder'), '', $page->class);
+        $name = str_replace(array('Page', 'Holder'), '', ClassInfo::shortName($page->ClassName));
         $name = FormField::name_to_label($name);
 
         // check if already exists

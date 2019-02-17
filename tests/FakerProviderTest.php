@@ -5,7 +5,7 @@ namespace Seeder\Tests;
 use Seeder\FakerProvider;
 use Seeder\Util\Field;
 use Seeder\Util\SeederState;
-use SilverStripe\Dev\SapphireTest
+use SilverStripe\Dev\SapphireTest;
 
 /**
  * Class FakerProviderTest

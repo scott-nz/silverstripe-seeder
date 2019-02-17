@@ -5,7 +5,7 @@ namespace Seeder\Tests;
 use Seeder\Helpers\ConfigParser;
 use Seeder\Util\SeederState;
 use SilverStripe\CMS\Model\SiteTree;
-use Seeder\PageTitleProvider;
+use Seeder\Providers\PageTitleProvider;
 use SilverStripe\Dev\SapphireTest;
 
 /**
@@ -26,7 +26,7 @@ class PageTitleProviderTest extends SapphireTest
     {
         $config = new ConfigParser();
         $field = $config->objectConfig2Field(array(
-            'class' => 'SiteTree',
+            'class' => SiteTree::class,
             'fields' => array(
                 'Title' => 'pageTitle()',
             ),

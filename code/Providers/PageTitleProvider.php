@@ -2,7 +2,8 @@
 
 namespace Seeder\Providers;
 
-use FormField;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Forms\FormField;
 
 /**
  * Class PageTitleProvider
@@ -28,7 +29,7 @@ class PageTitleProvider extends Provider
 
         $page = $state->object();
 
-        $name = str_replace(array('Page', 'Holder'), '', $page->class);
+        $name = str_replace(array('Page', 'Holder'), '', ClassInfo::shortName($page->ClassName));
         $name = ucwords(FormField::name_to_label($name));
 
         return $name;

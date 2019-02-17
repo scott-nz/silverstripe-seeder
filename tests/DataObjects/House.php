@@ -14,14 +14,16 @@ class House extends DataObject implements TestOnly
     /**
      * @var array
      */
-    public static $db = array(
+    private static $db = array(
         'Address' => 'Varchar(255)',
     );
+
+    private static $table_name = 'House';
 
     /**
      * @var array
      */
     private static $many_many = array(
-        'Occupants' => 'Seeder\Tests\Human',
+        'Occupants' => Human::class,
     );
 }

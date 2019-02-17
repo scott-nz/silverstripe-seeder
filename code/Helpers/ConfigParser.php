@@ -3,7 +3,10 @@
 namespace Seeder\Helpers;
 
 use Exception;
+use Seeder\Seeder;
 use Seeder\Util\Field;
+use SilverStripe\Core\ClassInfo;
+use SilverStripe\Core\Config\Config;
 use SilverStripe\ORM\DataObject;
 use SilverStripe\Core\Injector;
 use Psr\Log\LoggerInterface;
@@ -29,8 +32,7 @@ class ConfigParser
      */
     public function __construct($writer = null)
     {
-        $config = \Config::inst();
-        $this->config = $config->forClass('Seeder');
+        $this->config = Config::forClass(Seeder::class);
         $this->writer = $writer;
     }
 
@@ -77,10 +79,7 @@ class ConfigParser
         $object = singleton($className);
 
         $ancestry = array();
-        foreach ($object->getClassAncestry() as $className) {
-            $classObject = singleton($className);
-            $ancestry[] = $classObject;
-        }
+        $ancestry = ClassInfo::ancestry($className, true);
 
         $field->ancestry = $ancestry;
 
@@ -98,42 +97,53 @@ class ConfigParser
         $hasManyFields = array();
         $manyManyFields = array();
         foreach ($field->ancestry as $classObject) {
-            foreach (DataObject::custom_database_fields($classObject->ClassName) as $fieldName => $fieldType) {
+            foreach (DataObject::getSchema()->databaseFields($classObject, false) as $fieldName => $fieldType) {
                 $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
                 if ($fieldType !== 'ForeignKey' && !$ignored) {
                     $fields[$fieldName] = $fieldType;
                 }
             }
+            $singleton = singleton($classObject);
+            $config = $singleton->config();
+            $hasOne = $config->get('has_one');
+            if($hasOne) {
+                foreach ($hasOne as $fieldName => $className) {
+                    $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
+                    if (!$ignored
+                        && isset($options['fields'])
+                        && array_key_exists($fieldName, $options['fields'])
+                    ) {
+                        $hasOneFields[$fieldName] = $className;
+                    }
+                }
+            }
 
-            foreach ($classObject->has_one() as $fieldName => $className) {
-                $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
-                if (!$ignored
-                    && isset($options['fields'])
-                    && array_key_exists($fieldName, $options['fields'])
-                ) {
-                    $hasOneFields[$fieldName] = $className;
+            $hasMany = $config->get('has_many');
+            // limit to fields that specify use
+            if($hasMany) {
+                foreach ($hasMany as $fieldName => $className) {
+                    $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
+                    if (!$ignored
+                        && isset($options['fields'])
+                        && array_key_exists($fieldName, $options['fields'])
+                    ) {
+                        $hasManyFields[$fieldName] = $className;
+                    }
                 }
             }
 
             // limit to fields that specify use
-            foreach ($classObject->has_many() as $fieldName => $className) {
-                $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
-                if (!$ignored
-                    && isset($options['fields'])
-                    && array_key_exists($fieldName, $options['fields'])
-                ) {
-                    $hasManyFields[$fieldName] = $className;
-                }
-            }
-
+            $manyMany = $config->get('many_many');
             // limit to fields that specify use
-            foreach ($classObject->many_many() as $fieldName => $className) {
-                $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
-                if (!$ignored
-                    && isset($options['fields'])
-                    && array_key_exists($fieldName, $options['fields'])
-                ) {
-                    $manyManyFields[$fieldName] = $className;
+            if($manyMany) {
+                foreach ($manyMany as $fieldName => $className) {
+                    $ignored = isset($ignoreLookup[$fieldName]) && !isset($properties[$fieldName]);
+                    if (!$ignored
+                        && isset($options['fields'])
+                        && array_key_exists($fieldName, $options['fields'])
+                    ) {
+                        $manyManyFields[$fieldName] = $className;
+                    }
                 }
             }
         }
@@ -235,8 +245,8 @@ class ConfigParser
 
         $ignoreFields = array();
         foreach ($field->ancestry as $object) {
-            if (isset($defaultIgnores[$object->ClassName])) {
-                $ignoreFields = array_merge($ignoreFields, $defaultIgnores[$object->ClassName]);
+            if ($defaultIgnores && isset($defaultIgnores[$object])) {
+                $ignoreFields = array_merge($ignoreFields, $defaultIgnores[$object]);
             }
         }
 
@@ -257,8 +267,8 @@ class ConfigParser
 
         $defaultValues = $this->config->default_values;
         foreach ($field->ancestry as $object) {
-            if (isset($defaultValues[$object->ClassName])) {
-                $properties = array_merge($properties, $defaultValues[$object->ClassName]);
+            if ($defaultValues && isset($defaultValues[$object])) {
+                $properties = array_merge($properties, $defaultValues[$object]);
             }
         }
 
@@ -314,8 +324,8 @@ class ConfigParser
 
         $defaultProviders = $this->config->default_providers;
         foreach ($field->ancestry as $object) {
-            if (isset($defaultProviders[$object->ClassName])) {
-                $providerClassName = $defaultProviders[$object->ClassName];
+            if (isset($defaultProviders[$object])) {
+                $providerClassName = $defaultProviders[$object];
             }
         }
 

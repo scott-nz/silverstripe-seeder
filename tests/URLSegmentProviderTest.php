@@ -3,9 +3,9 @@
 namespace Seeder\Tests;
 
 use Seeder\Helpers\ConfigParser;
+use Seeder\Providers\URLSegmentProvider;
 use Seeder\Util\SeederState;
 use SilverStripe\CMS\Model\SiteTree;
-use Seeder\URLSegmentProvider;
 use SilverStripe\Dev\SapphireTest;
 
 /**
@@ -26,7 +26,7 @@ class URLSegmentProviderTest extends SapphireTest
     {
         $config = new ConfigParser();
         $field = $config->objectConfig2Field(array(
-            'class' => 'SiteTree',
+            'class' => SiteTree::class,
             'fields' => array(
                 'URLSegment' => 'urlSegment()',
             ),

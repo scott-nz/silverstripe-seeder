@@ -37,11 +37,11 @@ class SortProvider extends Provider
         }
 
         $obj = $state->object();
-        $className = $obj->class;
+        $className = $obj->ClassName;
         if (!isset(self::$classCache[$className])) {
             $ancestry = singleton($className)->getClassAncestry();
             foreach ($ancestry as $ancestor) {
-                $fields = DataObject::custom_database_fields($ancestor);
+                $fields = DataObject::getSchema()->databaseFields($ancestor, false);
                 if (isset($fields[$field->name])) {
                     self::$classCache[$className] = $ancestor;
                     break;

@@ -24,13 +24,13 @@ class BatchSeedWriterTest extends SapphireTest
     /**
      * @var array
      */
-    protected $extraDataObjects = array(
-        'Seeder\Tests\Dog',
-        'Seeder\Tests\House',
-        'Seeder\Tests\Human',
-        'Seeder\Tests\Pet',
-        'Seeder\Tests\Treat',
-    );
+    protected static $extra_dataobjects = [
+        Dog::class,
+        House::class,
+        Human::class,
+        Pet::class,
+        Treat::class,
+    ];
 
     /**
      *
@@ -46,9 +46,7 @@ class BatchSeedWriterTest extends SapphireTest
      */
     public function testWrite_WriteObject_SeedAndObjectWritten()
     {
-        $this->markTestIncomplete(
-            'Need silverstripe-batchwrite compatibility.'
-        );
+
 
         $batchSizes = array(10, 30, 100, 300);
 
@@ -109,8 +107,8 @@ class BatchSeedWriterTest extends SapphireTest
 
             $writer->finish();
 
-            $dogSeeds = SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Dog');
-            $ownerSeeds = SeedRecord::get()->filter('SeedClassName', 'Seeder\Tests\Human');
+            $dogSeeds = SeedRecord::get()->filter('SeedClassName', Dog::class);
+            $ownerSeeds = SeedRecord::get()->filter('SeedClassName', Human::class);
             $dogs = Dog::get();
             $owners = Human::get();
 

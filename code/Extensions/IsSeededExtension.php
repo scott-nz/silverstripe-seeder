@@ -1,6 +1,8 @@
 <?php
 namespace Seeder\Extensions;
 
+use SilverStripe\Core\Extension;
+
 /**
  * Class IsSeededExtension
  */

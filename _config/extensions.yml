@@ -1,9 +1,9 @@
 ---
 Name: silverstripe-seeder-extensions
-After: 'framework/*', 'cms/*'
+After: 'framework/*'
 ---
 
-DataObject:
+SilverStripe\ORM\DataObject:
   extensions:
     - Seeder\Extensions\IsSeededExtension
-    - WriteCallbackExtension
+    - LittleGiant\BatchWrite\Extensions\WriteCallbackExtension

@@ -2,6 +2,8 @@
 
 namespace Seeder\Util;
 
+use SilverStripe\ORM\DataObject;
+
 /**
  * Class SeederState
  * @package Seeder\Util
@@ -31,7 +33,7 @@ class SeederState
      * @param int $index
      * @param SeederState $up
      */
-    public function __construct(Field $field = null, \DataObject $object = null, $index = 0, SeederState $up = null)
+    public function __construct(Field $field = null, DataObject $object = null, $index = 0, SeederState $up = null)
     {
         $this->field = $field;
         $this->object = $object;
@@ -77,7 +79,7 @@ class SeederState
      * @param int $index
      * @return SeederState
      */
-    public function down(Field $field, \DataObject $dataObject = null, $index = 0)
+    public function down(Field $field, DataObject $dataObject = null, $index = 0)
     {
         return new SeederState($field, $dataObject, $index, $this);
     }

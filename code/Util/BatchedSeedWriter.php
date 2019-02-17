@@ -2,6 +2,11 @@
 
 namespace Seeder\Util;
 
+use LittleGiant\BatchWrite\BatchedWriter;
+use LittleGiant\BatchWrite\QuickDataObject;
+use Seeder\DataObjects\SeedRecord;
+use SilverStripe\ORM\DataObject;
+
 /**
  * Class BatchedSeedWriter
  * @package Seeder\Util
@@ -28,9 +33,9 @@ class BatchedSeedWriter
      */
     public function __construct($batchSize = 100)
     {
-        $this->batchWriter = new \BatchedWriter($batchSize);
+        $this->batchWriter = new BatchedWriter($batchSize);
 
-        $this->dataObjectRecordProperty = new \ReflectionProperty('DataObject', 'record');
+        $this->dataObjectRecordProperty = new \ReflectionProperty(DataObject::class, 'record');
         $this->dataObjectRecordProperty->setAccessible(true);
     }
 
@@ -38,9 +43,9 @@ class BatchedSeedWriter
      * @param \DataObject $object
      * @param Field $field
      */
-    public function write(\DataObject $object, Field $field)
+    public function write(DataObject $object, Field $field)
     {
-        $className = $object->class;
+        $className = $object->ClassName;
 
         // cache has_extension call
         if (!isset($this->isVersioned[$className])) {
@@ -67,11 +72,11 @@ class BatchedSeedWriter
             $batchWriter = $this->batchWriter;
 
             $object->onAfterExistsCallback(function ($object) use ($field, $isRoot, $dataObjectProperty, $batchWriter) {
-                $seed = \QuickDataObject::create('SeedRecord');
+                $seed = QuickDataObject::create(SeedRecord::class);
 
                 $objectFields = $dataObjectProperty->getValue($object);
                 $fields = $dataObjectProperty->getValue($seed);
-                $fields['SeedClassName'] = $object->class;
+                $fields['SeedClassName'] = $object->ClassName;
                 $fields['SeedID'] = $objectFields['ID'];
                 $fields['Key'] = $field->key;
                 $fields['Root'] = $isRoot;

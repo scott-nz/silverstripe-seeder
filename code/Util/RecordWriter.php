@@ -2,6 +2,9 @@
 
 namespace Seeder\Util;
 
+use Seeder\DataObjects\SeedRecord;
+use SilverStripe\ORM\DataObject;
+
 /**
  * Class RecordWriter
  * @package Seeder\Util
@@ -14,7 +17,7 @@ class RecordWriter
      * @throws \ValidationException
      * @throws null
      */
-    public function write(\DataObject $object, Field $field)
+    public function write(DataObject $object, Field $field)
     {
         if ($object->has_extension('Versioned')) {
             $object->writeToStage('Stage');
@@ -30,7 +33,7 @@ class RecordWriter
         }
 
         if (!$object->isSeeded()) {
-            $seed = new \SeedRecord();
+            $seed = new SeedRecord();
             $seed->SeedClassName = $object->ClassName;
             $seed->SeedID = $object->ID;
             $seed->Key = $field->key;
