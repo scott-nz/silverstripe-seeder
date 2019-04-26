@@ -3,9 +3,12 @@
 namespace Seeder\Tests;
 
 use Seeder\Helpers\HeuristicParser;
+use Seeder\Providers\URLSegmentProvider;
+use Seeder\Providers\ValueProvider;
 use Seeder\Util\BatchedSeedWriter;
 use Seeder\Util\Field;
 use Seeder\Util\RecordWriter;
+use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Dev\SapphireTest;
 
 /**
@@ -24,7 +27,7 @@ class HeuristicTest extends SapphireTest
             'URLSegment' => array(
                 'conditions' => array(
                     'name' => 'URLSegment',
-                    'parent' => 'is_a(SiteTree)',
+                    'parent' => 'is_a(' . SiteTree::class . ')',
                 ),
                 'field' => 'URLSegment()',
             )
@@ -34,7 +37,7 @@ class HeuristicTest extends SapphireTest
 
         $field = new Field();
         $field->name = 'Page';
-        $field->dataType = 'SiteTree';
+        $field->dataType = SiteTree::class;
 
         $urlField = new Field();
         $urlField->name = 'URLSegment';
@@ -48,7 +51,7 @@ class HeuristicTest extends SapphireTest
 
         $heuristic->apply($urlField, new RecordWriter());
 
-        $this->assertInstanceOf('Seeder\URLSegmentProvider', $urlField->provider);
+        $this->assertInstanceOf(URLSegmentProvider::class, $urlField->provider);
     }
 
     /**
@@ -63,7 +66,7 @@ class HeuristicTest extends SapphireTest
                     'name' => 'MenuTitle',
                     'fieldType' => 'db',
                     'dataType' => 'like(varchar%)',
-                    'parent' => 'is_a(SiteTree)',
+                    'parent' => 'is_a(' . SiteTree::class . ')',
                 ),
                 'field' => '{$Title}',
             )
@@ -73,7 +76,7 @@ class HeuristicTest extends SapphireTest
 
         $field = new Field();
         $field->name = 'Magic';
-        $field->dataType = 'SiteTree';
+        $field->dataType = SiteTree::class;
 
         $titleField = new Field();
         $titleField->name = 'MenuTitle';
@@ -87,6 +90,6 @@ class HeuristicTest extends SapphireTest
 
         $heuristic->apply($titleField, new RecordWriter());
 
-        $this->assertInstanceOf('Seeder\ValueProvider', $titleField->provider);
+        $this->assertInstanceOf(ValueProvider::class, $titleField->provider);
     }
 }

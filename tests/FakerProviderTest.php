@@ -2,7 +2,7 @@
 
 namespace Seeder\Tests;
 
-use Seeder\FakerProvider;
+use Seeder\Providers\FakerProvider;
 use Seeder\Util\Field;
 use Seeder\Util\SeederState;
 use SilverStripe\Dev\SapphireTest;

@@ -13,6 +13,8 @@ use SilverStripe\Versioned\Versioned;
  * Class ProviderTest
  * @package Seeder\Tests
  */
+
+//TESTS FAILING
 class ProviderTest extends SapphireTest
 {
     /**
@@ -23,22 +25,21 @@ class ProviderTest extends SapphireTest
     /**
      * @var array
      */
-    protected $extraDataObjects = array(
-        'Seeder\Tests\Dog',
-        'Seeder\Tests\House',
-        'Seeder\Tests\Human',
-        'Seeder\Tests\Pet',
-        'Seeder\Tests\Treat',
-    );
+    protected static $extra_dataobjects = [
+        Dog::class,
+        House::class,
+        Human::class,
+        Pet::class,
+        Treat::class,
+    ];
 
-//    /**
-//     *
-//     */
-//    public function __construct()
-//    {
-//        parent::__construct();
-//        $this->setUpOnce();
-//    }
+    /**
+     *
+     */
+    public function __construct()
+    {
+        parent::__construct();
+    }
 
     /**
      *
@@ -81,11 +82,11 @@ class ProviderTest extends SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'Seeder\Tests\Human',
-            'provider' => 'Seeder\Tests\TestProvider',
+            'class' => Human::class,
+            'provider' => TestProvider::class,
             'fields' => array(
                 'Parent' => array(
-                    'provider' => 'Seeder\Tests\TestProvider',
+                    'provider' => TestProvider::class,
                     'fields' => array(
                         'Name' => 'test()',
                         'Age' => 'test()',
@@ -118,14 +119,14 @@ class ProviderTest extends SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'Seeder\Tests\Human',
-            'provider' => 'Seeder\Tests\TestProvider',
+            'class' => Human::class,
+            'provider' => TestProvider::class,
             'fields' => array(
                 'Parent' => array(
-                    'provider' => 'Seeder\Tests\TestProvider',
+                    'provider' => TestProvider::class,
                     'fields' => array(
                         'Parent' => array(
-                            'provider' => 'Seeder\Tests\TestProvider',
+                            'provider' => TestProvider::class,
                             'fields' => array(
                                 'Parent' => 'value({$Up.Up})',
                             ),
@@ -159,8 +160,8 @@ class ProviderTest extends SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'Seeder\Tests\Dog',
-            'provider' => 'Seeder\Tests\TestProvider',
+            'class' => Dog::class,
+            'provider' => TestProvider::class,
             'fields' => array(
                 'Treats' => array(
                     'count' =>  10,
@@ -198,12 +199,12 @@ class ProviderTest extends SapphireTest
         $configParser = new ConfigParser($writer);
 
         $field = $configParser->objectConfig2Field(array(
-            'class' => 'Seeder\Tests\Human',
-            'provider' => 'Seeder\Tests\TestProvider',
+            'class' => Human::class,
+            'provider' => TestProvider::class,
             'fields' => array(
                 'Children' => array(
                     'count' => 10,
-                    'provider' => 'Seeder\Tests\TestProvider',
+                    'provider' => TestProvider::class,
                     'fields' => array(
                         'Name' => 'test()',
                         'Age' => 'test()',
@@ -211,7 +212,7 @@ class ProviderTest extends SapphireTest
                 ),
                 'Pets' => array(
                     'count' => 5,
-                    'provider' => 'Seeder\Tests\TestProvider',
+                    'provider' => TestProvider::class,
                 ),
             ),
         ));
@@ -259,14 +260,16 @@ class ProviderTest extends SapphireTest
         $this->assertCount(1, $pages);
         $this->assertFalse($pages[0]->isPublished());
 
-        $currentStage = Versioned::current_stage();
-        Versioned::reading_stage('Stage');
+        $currentStage = Versioned::get_stage();
+        Versioned::set_stage('Stage');
         $this->assertEquals(1, SiteTree::get()->Count());
 
-        Versioned::reading_stage('Live');
+        Versioned::set_stage('Live');
         $this->assertEquals(0, SiteTree::get()->Count());
 
-        Versioned::reading_stage($currentStage);
+        if ($currentStage != "") {
+            Versioned::set_stage($currentStage);
+        }
     }
 
     /**
@@ -274,6 +277,7 @@ class ProviderTest extends SapphireTest
      */
     public function testGenerate_PublishedPage_GeneratesPublishedPage()
     {
+        //TODO: fix test
         $writer = new RecordWriter();
         $configParser = new ConfigParser($writer);
 
@@ -291,24 +295,19 @@ class ProviderTest extends SapphireTest
         $writer->finish();
 
         $this->assertCount(1, $pages);
+        $is = $pages[0]->isPublished();
         $this->assertTrue($pages[0]->isPublished());
 
         $currentStage = Versioned::current_stage();
-        Versioned::reading_stage('Stage');
+        Versioned::get_stage('Stage');
         $this->assertEquals(1, SiteTree::get()->Count());
 
-        Versioned::reading_stage('Live');
+        Versioned::set_stage('Live');
         $this->assertEquals(1, SiteTree::get()->Count());
 
-        Versioned::reading_stage($currentStage);
+        if ($currentStage != "") {
+            Versioned::set_stage($currentStage);
+        }
     }
 
-//    /**
-//     *
-//     */
-//    public static function tearDownAfterClass()
-//    {
-//        parent::tearDownAfterClass();
-//        \SapphireTest::delete_all_temp_dbs();
-//    }
 }

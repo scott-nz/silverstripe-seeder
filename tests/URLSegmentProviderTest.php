@@ -49,13 +49,4 @@ class URLSegmentProviderTest extends SapphireTest
 
         $this->assertEquals('site-tree', $url[0]);
     }
-
-//    /**
-//     *
-//     */
-//    public static function tearDownAfterClass()
-//    {
-//        parent::tearDownAfterClass();
-//        \SapphireTest::delete_all_temp_dbs();
-//    }
 }

@@ -35,7 +35,6 @@ class ConfigParserTest extends SapphireTest
     public function __construct()
     {
         parent::__construct();
-        $this->setUpOnce();
     }
 
     /**
@@ -59,18 +58,18 @@ class ConfigParserTest extends SapphireTest
             ),
         ));
 
-        $this->assertEquals('Seeder\Tests\Dog', $field->dataType);
+        $this->assertEquals(Dog::class, $field->dataType);
         $this->assertEquals('Dog', $field->key);
-        $this->assertInstanceOf('Seeder\Tests\TestProvider', $field->provider);
+        $this->assertInstanceOf(TestProvider::class, $field->provider);
         $this->assertEquals(100, $field->count);
         $this->assertEquals(100, $field->totalCount);
-        $this->assertCount(2, $field->fields);
+        $this->assertCount(6, $field->fields);
         $this->assertCount(0, $field->hasOne);
         $this->assertCount(0, $field->hasOne);
         $this->assertCount(0, $field->hasMany);
         $this->assertCount(0, $field->manyMany);
 
-        $nameField = $field->fields[0];
+        $nameField = $field->fields[4];
         $this->assertEquals(Field::FT_FIELD, $nameField->fieldType);
         $this->assertStringStartsWith('Varchar', $nameField->dataType);
         $this->assertEquals('Name', $nameField->name);
@@ -78,7 +77,7 @@ class ConfigParserTest extends SapphireTest
         $this->assertInstanceOf('Seeder\Tests\TestProvider', $nameField->provider);
         $this->assertEquals(100, $nameField->totalCount);
 
-        $ageField = $field->fields[1];
+        $ageField = $field->fields[5];
         $this->assertEquals(Field::FT_FIELD, $ageField->fieldType);
         $this->assertEquals('Int', $ageField->dataType);
         $this->assertEquals('Age', $ageField->name);
@@ -112,7 +111,7 @@ class ConfigParserTest extends SapphireTest
         $this->assertInstanceOf('Seeder\Tests\TestProvider', $parentField->provider);
         $this->assertEquals(1, $parentField->count);
         $this->assertEquals(1, $parentField->totalCount);
-        $this->assertCount(2, $parentField->fields);
+        $this->assertCount(6, $parentField->fields);
         $this->assertCount(0, $parentField->hasOne);
     }
 
@@ -140,7 +139,7 @@ class ConfigParserTest extends SapphireTest
         $this->assertInstanceOf('Seeder\Tests\TestProvider', $treatsField->provider);
         $this->assertEquals(10, $treatsField->count);
         $this->assertEquals(10, $treatsField->totalCount);
-        $this->assertCount(2, $treatsField->fields);
+        $this->assertCount(6, $treatsField->fields);
     }
 
     /**
@@ -167,7 +166,7 @@ class ConfigParserTest extends SapphireTest
         $this->assertInstanceOf('Seeder\Tests\TestProvider', $petsField->provider);
         $this->assertEquals(5, $petsField->count);
         $this->assertEquals(5, $petsField->totalCount);
-        $this->assertCount(2, $petsField->fields);
+        $this->assertCount(6, $petsField->fields);
     }
 
     /**
@@ -206,19 +205,10 @@ class ConfigParserTest extends SapphireTest
             ),
         ));
 
-        $nameField = $field->fields[0];
+        $nameField = $field->fields[4];
         $this->assertTrue($nameField->explicit);
 
-        $ageField = $field->fields[1];
+        $ageField = $field->fields[5];
         $this->assertFalse($ageField->explicit);
     }
-
-//    /**
-//     *
-//     */
-//    public static function tearDownAfterClass()
-//    {
-//        parent::tearDownAfterClass();
-//        \SapphireTest::delete_all_temp_dbs();
-//    }
 }

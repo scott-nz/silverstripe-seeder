@@ -12,6 +12,7 @@ use SilverStripe\Dev\SapphireTest;
  * Class SortProviderTest
  * @package Seeder\Tests
  */
+/////////// all tests passing
 class SortProviderTest extends SapphireTest
 {
     /**

@@ -141,7 +141,7 @@ abstract class Provider
             $values = $manyManyField->provider->generate($manyManyField, $state);
             if (!empty($values)) {
                 $relation = $manyManyField->methodName;
-                $afterExists = new \OnAfterExists(function () use ($object, $relation, $values, $writer) {
+                $afterExists = new OnAfterExists(function () use ($object, $relation, $values, $writer) {
                     $writer->writeManyMany($object, $relation, $values);
                 });
                 $afterExists->addCondition($object);
@@ -158,7 +158,7 @@ abstract class Provider
             if (!empty($values)) {
                 $object->onAfterExistsCallback(function ($object) use ($values, $writer, $hasManyField) {
                     $relation = '';
-                    foreach ($values[0]->has_one() as $fieldName => $className) {
+                    foreach ($values[0]->hasOne() as $fieldName => $className) {
                         if ($object instanceof $className) {
                             $relation = $fieldName . 'ID';
                         }

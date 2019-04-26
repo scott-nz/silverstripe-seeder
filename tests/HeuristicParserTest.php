@@ -34,7 +34,6 @@ class HeuristicParserTest extends SapphireTest
     public function __construct()
     {
         parent::__construct();
-        $this->setUpOnce();
     }
 
     /**
@@ -173,13 +172,4 @@ class HeuristicParserTest extends SapphireTest
         $field->fieldType = 'has_one';
         $this->assertFalse($heuristic->match($childField));
     }
-//
-//    /**
-//     *
-//     */
-//    public static function tearDownAfterClass()
-//    {
-//        parent::tearDownAfterClass();
-//        \SapphireTest::delete_all_temp_dbs();
-//    }
 }

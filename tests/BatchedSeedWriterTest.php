@@ -5,10 +5,11 @@ namespace Seeder\Tests;
 use Seeder\DataObjects\SeedRecord;
 use Seeder\Util\BatchedSeedWriter;
 use Seeder\Util\Field;
+use SilverStripe\Core\Injector\Injector;
 use SilverStripe\Dev\SapphireTest;
 use SilverStripe\CMS\Model\SiteTree;
 use SilverStripe\Versioned\Versioned;
-use OnAfterExists;
+use LittleGiant\BatchWrite\OnAfterExists;
 
 /**
  * Class BatchSeedWriterTest
@@ -46,32 +47,39 @@ class BatchSeedWriterTest extends SapphireTest
      */
     public function testWrite_WriteObject_SeedAndObjectWritten()
     {
-
+        //TODO: fix test
 
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
+
             $writer = new BatchedSeedWriter($batchSize);
 
-            $dog = new Dog();
+            $dog = Injector::inst()->get(Dog::class);
             $dog->Name = 'Bob';
             $dog->Breed = 'Cavvy';
-
             $writer->write($dog, $this->createField());
 
             $writer->finish();
 
-            $this->assertEquals(1, Dog::get()->Count());
-            $this->assertEquals(1, SeedRecord::get()->Count());
-
             $seed = SeedRecord::get()->first();
             $dog = Dog::get()->first();
+
+            $this->assertEquals(1, Dog::get()->Count());
+            $c = SeedRecord::get()->Count();
+            $this->assertEquals(1, SeedRecord::get()->Count());
 
             $this->assertEquals('Seeder\Tests\Dog', $seed->SeedClassName);
             $this->assertEquals($dog->ID, $seed->SeedID);
 
-            $seed->delete();
+            if($seed) {
+                $seed->delete();
+            }
             $dog->delete();
+            unset($dog);
+            unset($writer);
+            unset($seed);
+            $a = 1;
         }
     }
 
@@ -80,10 +88,7 @@ class BatchSeedWriterTest extends SapphireTest
      */
     public function testWrite_WriteManyObjects_SeedsAndObjectsWritten()
     {
-        $this->markTestIncomplete(
-            'Need silverstripe-batchwrite compatibility.'
-        );
-
+        //TODO: fix test
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -107,8 +112,8 @@ class BatchSeedWriterTest extends SapphireTest
 
             $writer->finish();
 
-            $dogSeeds = SeedRecord::get()->filter('SeedClassName', Dog::class);
-            $ownerSeeds = SeedRecord::get()->filter('SeedClassName', Human::class);
+            $dogSeeds = SeedRecord::get()->filter('SeedClassName', 'Dog');
+            $ownerSeeds = SeedRecord::get()->filter('SeedClassName', 'Human');
             $dogs = Dog::get();
             $owners = Human::get();
 
@@ -147,10 +152,7 @@ class BatchSeedWriterTest extends SapphireTest
      */
     public function testWrite_WriteObjectsTwice_SeedsWrittenOnce()
     {
-        $this->markTestIncomplete(
-            'Need silverstripe-batchwrite compatibility.'
-        );
-
+        //TODO: fix test
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -185,9 +187,6 @@ class BatchSeedWriterTest extends SapphireTest
      */
     public function testWrite_WriteVersionedObjectsNotPublished_ObjectsWrittenToStage()
     {
-        $this->markTestIncomplete(
-            'Need silverstripe-batchwrite compatibility.'
-        );
 
         $batchSizes = array(10, 30, 100, 300);
 
@@ -205,21 +204,23 @@ class BatchSeedWriterTest extends SapphireTest
 
             $writer->finish();
 
-            $currentStage = Versioned::current_stage();
-            Versioned::reading_stage('Stage');
+            $currentStage = Versioned::get_stage();
+            Versioned::set_stage('Stage');
             $this->assertEquals(100, SiteTree::get()->Count());
 
-            Versioned::reading_stage('Live');
+            Versioned::set_stage('Live');
             $this->assertEquals(0, SiteTree::get()->Count());
 
-            \Versioned::reading_stage('Stage');
+            Versioned::set_stage('Stage');
             $pages = SiteTree::get();
             $seeds = SeedRecord::get();
             $writer->deleteFromStage($pages, 'Stage', 'Live');
             $writer->delete($seeds);
             $writer->finish();
 
-            Versioned::reading_stage($currentStage);
+            if ($currentStage != "") {
+                Versioned::set_stage($currentStage);
+            }
         }
     }
 
@@ -228,10 +229,7 @@ class BatchSeedWriterTest extends SapphireTest
      */
     public function testWrite_WriteVersionedObjects_ObjectsWrittenToLive()
     {
-        $this->markTestIncomplete(
-            'Need silverstripe-batchwrite compatibility.'
-        );
-
+        //TODO: fix test
         $batchSizes = array(10, 30, 100, 300);
 
         foreach ($batchSizes as $batchSize) {
@@ -247,11 +245,11 @@ class BatchSeedWriterTest extends SapphireTest
 
             $writer->finish();
 
-            $currentStage = Versioned::current_stage();
-            Versioned::reading_stage('Stage');
+            $currentStage = Versioned::get_stage();
+            Versioned::set_stage('Stage');
             $this->assertEquals(100, SiteTree::get()->Count());
 
-            \Versioned::reading_stage('Live');
+            Versioned::set_stage('Live');
             $this->assertEquals(100, SiteTree::get()->Count());
 
             $pages = SiteTree::get();
@@ -263,7 +261,9 @@ class BatchSeedWriterTest extends SapphireTest
             $this->assertEquals(0, SiteTree::get()->Count());
             $this->assertEquals(0, SeedRecord::get()->Count());
 
-            Versioned::reading_stage($currentStage);
+            if ($currentStage != "") {
+                Versioned::set_stage($currentStage);
+            }
         }
     }
 
@@ -272,9 +272,6 @@ class BatchSeedWriterTest extends SapphireTest
      */
     public function testWriteManyMany_WriteManyManyObjects_ObjectsAccessibleFromManyMany()
     {
-        $this->markTestIncomplete(
-            'Need silverstripe-batchwrite compatibility.'
-        );
 
         $batchSizes = array(10, 30, 100, 300);
 
@@ -328,12 +325,4 @@ class BatchSeedWriterTest extends SapphireTest
         return $field;
     }
 
-//    /**
-//     *
-//     */
-//    public static function tearDownAfterClass()
-//    {
-//        parent::tearDownAfterClass();
-//        \SapphireTest::delete_all_temp_dbs();
-//    }
 }

@@ -26,8 +26,6 @@ class FakerProvider extends Provider
      */
     public function __construct()
     {
-        parent::__construct();
-
         $this->faker = Factory::create();
     }
 
